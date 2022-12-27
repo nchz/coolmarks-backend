@@ -1,0 +1,37 @@
+{% extends "base.html" %}
+
+{% load i18n %}
+
+{% block html_head %}
+<style>
+  h1,
+  p {
+    color: white;
+  }
+</style>
+{% endblock %}
+
+{% block html_body %}
+
+<body
+  style="margin: 0; background: url(/static/imgs/background.webp); background-repeat: no-repeat; background-size: cover;">
+  <div style="height: 100%; display: flex; align-items: center;">
+    <div
+      style="width: 100%; background-color: rgba(0, 0, 0, 0.7); display: flex; flex-direction: column; align-items: center; justify-content: center;">
+      <h1 style="padding: 0.5em;">Sign Up</h1>
+      <form class="signup" id="signup_form" method="post" action="{% url 'account_signup' %}">
+        {% csrf_token %}
+        {{ form.as_p }}
+        {% if redirect_field_value %}
+        <input type="hidden" name="{{ redirect_field_name }}" value="{{ redirect_field_value }}" />
+        {% endif %}
+        <div style="display: flex; align-items: center; justify-content: space-between;">
+          <!-- <a href="{% url 'account_login' %}">Already have an account? Login</a> -->
+          <a href="{{ login_url }}">Have an account? Login</a>
+          <button class="btn btn-primary" type="submit">Sign Up</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</body>
+{% endblock %}

@@ -1,0 +1,12 @@
+**/*.pyc
+**/*.bak.py
+
+**/collectstatic/
+**/data/
+logs/
+
+misc/
+**/*~
+**/.*
+!.gitignore
+!.flake8

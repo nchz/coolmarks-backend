@@ -1,0 +1,183 @@
+{% extends "base.html" %}
+
+{% block html_head %}
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
+
+<script>
+
+  function findCheckedRows() {
+    var result = [];
+    $("table > tbody input[type='checkbox']:checked").each((i, elem) => {
+      result.push(elem);
+    });
+    return result;
+  }
+
+  $(document).ready(function () {
+    $(".-links-form").submit(function () {
+      const checkedRows = findCheckedRows();
+      $("<input />")
+        .attr("type", "hidden")
+        .attr("name", "link_ids")
+        .attr("value", checkedRows.map(elem => elem.id).join(","))
+        .appendTo(this);
+
+      if (this.id == "delete-links-form") {
+        return confirm(`Delete ${checkedRows.length} items?`);
+      } else {
+        return true;
+      }
+    });
+  });
+
+  $(document).ready(function () {
+    $(".-links-form-button").click(function () {
+      $("<input />")
+        .attr("type", "hidden")
+        .attr("name", "action")
+        .attr("value", this.id.substring(5))
+        .appendTo(this.parentElement);
+    });
+  });
+
+  $(document).ready(function () {
+    $("#select-all").click(function () {
+      $("table > tbody input[type='checkbox']:not(:checked)").click();
+    })
+  });
+
+  $(document).ready(function () {
+    $("#select-none").click(function () {
+      $("table > tbody input[type='checkbox']:checked").click();
+    })
+  });
+
+  function selectRow(elem) {
+    // highlight row.
+    elem.parentElement.parentElement.classList.toggle("table-active");
+
+    // toggle visibility of panels if necessary.
+    const panelAdd = document.getElementById("panel-add");
+    const panelEdit = document.getElementById("panel-edit");
+
+    const checkedRows = findCheckedRows();
+    if (checkedRows.length == 0) {
+      // show only "panel-add".
+      panelAdd.classList.remove("d-none");
+      panelEdit.classList.add("d-none");
+    } else {
+      // find tags from selected rows.
+      const allTags = checkedRows.map(elem => elem.name).join(";").split(";").map(s => s.trim());
+      const tagsSet = allTags.filter((item, index) => item != "" && allTags.indexOf(item) == index).join("; ");
+      // update tags input placeholder in form.
+      document.getElementById("edit-tags-input").value = tagsSet;
+      // show only "panel-edit".
+      panelAdd.classList.add("d-none");
+      panelEdit.classList.remove("d-none");
+    }
+  }
+
+  $(document).ready(function () {
+    var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'))
+    var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
+      return new bootstrap.Tooltip(tooltipTriggerEl)
+    })
+  });
+
+  $(document).ready(function () {
+    console.log("aloha!");
+  });
+
+</script>
+
+{% endblock %}
+
+{% block body_main %}
+
+<div id="top-panel" class="d-flex m-2">
+
+  <div id="panel-select" style="width: 150;">
+    <h6 class="mx-2 mt-1 mb-0">Select</h6>
+    <div class="d-flex">
+      <button id="select-all" class="col m-1 btn btn-primary">All</button>
+      <button id="select-none" class="col m-1 btn btn-primary">None</button>
+    </div>
+  </div>
+
+  <div class="vr m-2"></div>
+
+  <!-- Either "panel-add" or "panel-edit" is visible (depending on selected rows), never both at the same time. -->
+
+  <div id="panel-add" class="col">
+    <h6 class="mx-2 mt-1 mb-0">Add Link</h6>
+    <form action="{% url 'links:list' %}" method="POST" class="d-flex">
+      {% csrf_token %}
+      <button type="submit" class="m-1 btn btn-success">+</button>
+      {% with link_list|first as first %}
+      <input type="text" name="_tags_string" placeholder="tags; separated; by ;" value="{{ first.tags_string }}"
+        class="col m-1 form-control">
+      {% endwith %}
+      <input required type="url" name="location" placeholder="http://example.com" class="w-75 m-1 form-control">
+    </form>
+  </div>
+
+  <div id="panel-edit" class="d-none col">
+    <h6 class="mx-2 mt-1 mb-0">Edit Tags</h6>
+    <div class="d-flex">
+      <form id="edit-tags-form" action="{% url 'links:edit' %}" method="POST" class="-links-form d-flex col">
+        {% csrf_token %}
+        <button type="submit" class="-links-form-button m-1 btn btn-warning" id="tags-set" data-bs-toggle="tooltip"
+          data-bs-placement="bottom" title="Replace tags for selected items">Set</button>
+        <button type="submit" class="-links-form-button m-1 btn btn-warning" id="tags-add" data-bs-toggle="tooltip"
+          data-bs-placement="bottom" title="Add tags to selected items">Add</button>
+        <button type="submit" class="-links-form-button m-1 btn btn-warning" id="tags-remove" data-bs-toggle="tooltip"
+          data-bs-placement="bottom" title="Remove tags from selected items">Remove</button>
+        <input id="edit-tags-input" type="text" name="_tags_string" placeholder="tags; separated; by ;"
+          class="col m-1 form-control">
+      </form>
+      <div class="vr mx-2"></div>
+      <form id="delete-links-form" action="{% url 'links:delete' %}" method="POST" class="-links-form">
+        {% csrf_token %}
+        <button type="submit" class="m-1 btn btn-danger">Delete Links</button>
+      </form>
+    </div>
+  </div>
+
+</div>
+
+<table id="links-table" class="table table-hover">
+  <thead>
+    <tr>
+      <th></th>
+      <th>Date added</th>
+      <th>Title</th>
+      <th>Domain</th>
+      <th>Tags</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for link in link_list %}
+    <tr>
+      <td style="width: 0;">
+        <input id="{{ link.id }}" type="checkbox" onchange="selectRow(this)" name="{{ link.tags_string }}">
+      </td>
+      <td onclick="$('#{{ link.id }}').click()">
+        {{ link.dt | slice:":19" }}
+      </td>
+      <td><a href="{{ link.location }}" target="_blank">{{ link.title }}</a></td>
+      <td>{{ link.domain }}</td>
+      <td onclick="$('#{{ link.id }}').click()">
+        {% for tag in link.tags.all %}
+        <span class="my-1 badge rounded-pill bg-primary">
+          {{ tag.name }}<span style="font-size: 0;">;</span>
+        </span>
+        {% endfor %}
+      </td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+
+{% endblock %}
