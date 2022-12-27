@@ -1,0 +1,68 @@
+<html>
+
+<head>
+  <title>Coolmarks {% block html_title %}{% endblock %}</title>
+
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <link href="https://bootswatch.com/5/flatly/bootstrap.min.css" rel="stylesheet">
+
+  <style>
+    :root {
+      --top-width: 90px;
+      --main-color: #333;
+    }
+
+    body {
+      margin: var(--top-width) 0px 0px 0px;
+    }
+
+    header {
+      position: fixed;
+      z-index: 100;
+      top: 0;
+      padding: 10px;
+      width: 100%;
+      height: var(--top-width);
+      box-sizing: border-box;
+      background-color: var(--main-color);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+  </style>
+
+  {% block html_head %}
+  {% endblock %}
+</head>
+
+{% block html_body %}
+
+<body>
+  {% block body_header %}
+  <header>
+    <div>
+      <a href="/">
+        <img class="mx-3" height="80px" src="/static/imgs/coolmarks-logo.png">
+      </a>
+    </div>
+    <div>
+      {% if request.user.is_authenticated %}
+      <a href="{% url 'links:list' %}" class="m-1 btn btn-secondary" style="width: 100px;">My Links</a>
+      <a href="{% url 'links:bulk_add' %}" class="m-1 btn btn-secondary" style="width: 100px;">Bulk Add</a>
+      <a href="{% url 'account_logout' %}" class="m-1 btn btn-secondary" style="width: 100px;">Logout</a>
+      {% else %}
+      <a href="{% url 'account_signup' %}" class="m-1 btn btn-secondary" style="width: 100px;">Signup</a>
+      <a href="{% url 'account_login' %}" class="m-1 btn btn-secondary" style="width: 100px;">Login</a>
+      {% endif %}
+    </div>
+  </header>
+  {% endblock %}
+  {% block body_main %}
+  <main>
+  </main>
+  {% endblock %}
+</body>
+{% endblock %}
+
+</html>

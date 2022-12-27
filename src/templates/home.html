@@ -1,0 +1,56 @@
+{% extends "base.html" %}
+
+{% block body_main %}
+<main>
+  <div
+    style="width: 100%; height: 70%; background: url(/static/imgs/background-2.png); background-repeat: no-repeat; background-size: cover; display: flex; flex-direction: column; align-items: center; justify-content: center;">
+    <p style="font-size: 77; background-color: rgba(0, 0, 0, 0.7); padding: 0 0.7em; border-radius: 1em; color: white;">
+      Coolmarks</p>
+  </div>
+  <div style="margin: 5%; display: flex; flex-wrap: wrap;">
+    <div style="flex: 1;">
+      <div class="card border-light mb-3" style="min-width: 400px; margin: 77px;">
+        <div class="card-header" style="font-size: 55;">What?</div>
+        <div class="card-body">
+          <p class="card-text" style="font-size: 22;">
+            Coolmarks is a tool that allows you to save relevant web links and easily organize them to find the one you
+            need, the
+            moment you need it. Traditional bookmarks from web browser are still the best choice for those common
+            websites
+            that you want to access quickly.
+          </p>
+        </div>
+      </div>
+      <div class="card border-light mb-3" style="min-width: 400px; margin: 77px;">
+        <div class="card-header" style="font-size: 55;">How?</div>
+        <div class="card-body">
+          <p class="card-text" style="font-size: 22;">
+            Coolmarks consists of a simple web API that receives the links of interest from the users to store the
+            appropriate data, and a web dashboard to interact with the collected items.
+          </p>
+        </div>
+      </div>
+    </div>
+    <div style="flex: 1;">
+      <div class="card border-light mb-3" style="flex: 1; min-width: 400px; margin: 77px;">
+        <div class="card-header" style="font-size: 55;">Why?</div>
+        <div class="card-body">
+          <p class="card-text" style="font-size: 22;">
+            When I do intensive web surfing to research and learn about a new software library, or whatever, I often end
+            up
+            with lots of tabs open in my web browser and it becomes hard to keep track of them. An easy exit is to save
+            all the
+            tabs in a folder, but then it's not funny to browse a messed up bag of links.
+          </p>
+          <p class="card-text" style="font-size: 22;">
+            Sometimes I find myself researching my own bookmarks collected during some research, trying to figure out
+            which
+            of them is that one I remember I found, say, a month ago. The re-research process would be easier using some
+            metadata, like date added, and tagging the links to categorize them.
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</main>
+{% endblock %}

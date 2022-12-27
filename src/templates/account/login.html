@@ -1,0 +1,38 @@
+{% extends "base.html" %}
+
+{% load i18n %}
+{% load account socialaccount %}
+
+{% block html_head %}
+<style>
+  h1,
+  p {
+    color: white;
+  }
+</style>
+{% endblock %}
+
+{% block html_body %}
+
+<body
+  style="margin: 0; background: url(/static/imgs/background-3.png); background-repeat: no-repeat; background-size: cover;">
+  <div style="height: 100%; display: flex; align-items: center;">
+    <div
+      style="width: 100%; background-color: rgba(0, 0, 0, 0.7); display: flex; flex-direction: column; align-items: center; justify-content: center;">
+      <h1 style="padding: 0.5em;">Login</h1>
+      <p>If you have not created an account yet, then please <a href="{% url 'account_signup' %}">sign up</a> first.</p>
+      <form class="login" method="POST" action="{% url 'account_login' %}">
+        {% csrf_token %}
+        {{ form.as_p }}
+        {% if redirect_field_value %}
+        <input type="hidden" name="{{ redirect_field_name }}" value="{{ redirect_field_value }}" />
+        {% endif %}
+        <div style="display: flex; align-items: center; justify-content: space-between;">
+          <a href="javascript:alert('Then create a new account =)')">Forgot Password?</a>
+          <button class="btn btn-primary" type="submit">Login</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</body>
+{% endblock %}
