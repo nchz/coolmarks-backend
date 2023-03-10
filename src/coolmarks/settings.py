@@ -10,8 +10,9 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 DEBUG = True
 SECRET_KEY = "($39x(vd=1$1uc%nzq7!xrd*$uz0+0v*qsy2+3&oc&9#8q@^k3"
 ALLOWED_HOSTS = ["*"]
+CHROME_EXTENSION_ID = os.getenv("CHROME_EXTENSION_ID", "")
 CSRF_TRUSTED_ORIGINS = [
-    "chrome-extension://akmmjffnhjjcmaljijffnllflkbpofle",
+    f"chrome-extension://{CHROME_EXTENSION_ID}",
 ]
 
 

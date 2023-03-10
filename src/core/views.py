@@ -25,7 +25,7 @@ class LinkViewSet(viewsets.ModelViewSet):
     permission_classes = [permissions.IsAuthenticated]
 
     def get_queryset(self):
-        return self.request.user.link_set.all()
+        return self.request.user.link_set.prefetch_related("tags").all()
 
     def perform_create(self, serializer):
         serializer.save(owner=self.request.user)
