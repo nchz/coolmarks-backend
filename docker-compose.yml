@@ -2,8 +2,8 @@ version: "3"
 
 services:
   nginx:
-    container_name: cm_nginx
-    image: nginx:1.23.1-alpine
+    container_name: coolmarks-nginx
+    image: nginx:alpine-slim
     restart: always
     ports:
       - "80:80"
@@ -12,11 +12,11 @@ services:
       - ./conf/nginx:/etc/nginx/conf.d
       - ./logs/nginx:/var/log/nginx
     depends_on:
-      - cm_web
+      - coolmarks-backend
 
-  cm_web:
-    container_name: cm_web
-    image: coolmarks
+  coolmarks-backend:
+    container_name: coolmarks-backend
+    image: coolmarks-backend
     build: .
     restart: always
     env_file: .env

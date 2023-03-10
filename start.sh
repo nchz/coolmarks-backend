@@ -3,6 +3,7 @@
 mkdir -p src/data
 
 if [[ $1 = "c" ]]; then
+    read -p 'clean all? '
     rm -f src/data/db.sqlite3
     rm -f src/**/migrations/0*.py
 fi

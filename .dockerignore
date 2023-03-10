@@ -1,9 +1,10 @@
-**/__pycache__/
-*.py[cod]
+**/*.pyc
+**/*.bak.py
 
-.env
 **/collectstatic/
 **/data/
 logs/
 
 misc/
+**/*~
+**/.*
