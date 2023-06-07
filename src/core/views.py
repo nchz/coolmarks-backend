@@ -23,20 +23,10 @@ class TagViewSet(viewsets.ReadOnlyModelViewSet):
 class LinkViewSet(viewsets.ModelViewSet):
     serializer_class = LinkSerializer
     permission_classes = [permissions.IsAuthenticated]
+    filterset_fields = ["location", "domain"]
 
     def get_queryset(self):
         return self.request.user.link_set.prefetch_related("tags").all()
 
     def perform_create(self, serializer):
         serializer.save(owner=self.request.user)
-
-    @action(methods=["POST"], detail=False)
-    def check(self, request):
-        """
-        Look for the requested `location` in the user's links. Return a list
-        with at most one element, the representation of the (found) link.
-        """
-        location = request.data.get("location")
-        links = self.get_queryset().filter(location=location)
-        links = self.get_serializer(links, many=True)
-        return Response(links.data)
