@@ -23,6 +23,7 @@ class TagViewSet(viewsets.ReadOnlyModelViewSet):
 class LinkViewSet(viewsets.ModelViewSet):
     serializer_class = LinkSerializer
     permission_classes = [permissions.IsAuthenticated]
+    filterset_fields = ["location", "domain"]
 
     def get_queryset(self):
         return self.request.user.link_set.prefetch_related("tags").all()

@@ -47,6 +47,7 @@ INSTALLED_APPS = [
     "django.contrib.staticfiles",
     # Dependencies.
     "rest_framework",
+    "django_filters",
     "allauth",
     "allauth.account",
     "allauth.socialaccount",
@@ -128,6 +129,9 @@ REST_FRAMEWORK = {
         # "rest_framework.renderers.TemplateHTMLRenderer",
         "rest_framework.renderers.JSONRenderer",
         "rest_framework.renderers.BrowsableAPIRenderer",
+    ],
+    "DEFAULT_FILTER_BACKENDS": [
+        "django_filters.rest_framework.DjangoFilterBackend",
     ],
 }
 
