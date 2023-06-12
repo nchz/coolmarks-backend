@@ -2,7 +2,7 @@ from django.contrib.auth.models import User
 from rest_framework import serializers
 
 from core.models import Link, Tag
-from core.utils import validate_tag_name
+from core.utils import validate_tag_name, get_title_for_url
 
 
 class TagSlugRelatedField(serializers.SlugRelatedField):
@@ -35,6 +35,12 @@ class LinkSerializer(serializers.ModelSerializer):
     class Meta:
         model = Link
         fields = "__all__"
+
+    def create(self, validated_data):
+        if not validated_data.get("title"):
+            validated_data["title"] = get_title_for_url(validated_data["location"])
+
+        return super().create(validated_data)
 
 
 class TagSerializer(serializers.ModelSerializer):

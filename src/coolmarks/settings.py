@@ -13,8 +13,9 @@ ALLOWED_HOSTS = ["*"]
 CSRF_TRUSTED_ORIGINS = [
     "chrome-extension://akmmjffnhjjcmaljijffnllflkbpofle",
     "chrome-extension://mmkllcbhddckdgbkopbdmpdjhnhenbdm",
+    "http://localhost:3000",
 ]
-
+CORS_ALLOWED_ORIGINS = CSRF_TRUSTED_ORIGINS
 
 STATIC_URL = "/static/"
 STATIC_ROOT = BASE_DIR / "collectstatic"
@@ -47,9 +48,12 @@ INSTALLED_APPS = [
     "django.contrib.staticfiles",
     # Dependencies.
     "rest_framework",
+    "rest_framework.authtoken",
     "allauth",
     "allauth.account",
     "allauth.socialaccount",
+    "corsheaders",
+    "django_extensions",
     # "allauth.socialaccount.providers.google",
     # Project apps.
     "core",
@@ -58,6 +62,7 @@ INSTALLED_APPS = [
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
+    "corsheaders.middleware.CorsMiddleware",
     "django.middleware.common.CommonMiddleware",
     "django.middleware.csrf.CsrfViewMiddleware",
     "django.contrib.auth.middleware.AuthenticationMiddleware",
@@ -128,6 +133,10 @@ REST_FRAMEWORK = {
         # "rest_framework.renderers.TemplateHTMLRenderer",
         "rest_framework.renderers.JSONRenderer",
         "rest_framework.renderers.BrowsableAPIRenderer",
+    ],
+    "DEFAULT_AUTHENTICATION_CLASSES": [
+        "rest_framework.authentication.SessionAuthentication",
+        "rest_framework.authentication.TokenAuthentication",
     ],
 }
 
